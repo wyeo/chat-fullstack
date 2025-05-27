@@ -1,90 +1,201 @@
-# ChatFullstack
+# 🚀 FullStack Chat Application
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Application de messagerie instantanée complète construite avec **NestJS**, **React**, **PostgreSQL**, **MongoDB** dans un monorepo **NX**.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
-
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/zzwrqg9Pgc)
-
-
-## Generate a library
-
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
-```
-
-## Run tasks
-
-To build the library use:
-
-```sh
-npx nx build pkg1
-```
-
-To run any task with Nx use:
-
-```sh
-npx nx <target> <project-name>
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
+## 🏗️ Architecture
 
 ```
-npx nx release
+chat-fullstack/
+├── apps/
+│   ├── backend/          # API NestJS + WebSocket
+│   └── frontend/         # Application React
+├── libs/
+│   ├── shared-types/     # Types TypeScript partagés
+│   ├── shared-utils/     # Utilitaires communs
+│   └── shared-constants/ # Constantes partagées
+├── docker/               # Scripts d'initialisation DB
+└── docker-compose.yml    # Infrastructure Docker
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+## 🛠️ Stack Technique
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Backend
+- **NestJS** - Framework Node.js avec TypeScript
+- **PostgreSQL** - Base de données utilisateurs
+- **MongoDB** - Base de données messages
+- **JWT** - Authentification
+- **WebSocket** - Communication temps réel
+- **bcrypt** - Hachage des mots de passe
 
-## Keep TypeScript project references up to date
+### Frontend
+- **React** avec TypeScript
+- **React Router** - Navigation
+- **Context API** - Gestion d'état
+- **Socket.io Client** - WebSocket
+- **CSS/SCSS** - Styling
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+### Outils
+- **NX** - Monorepo et build system
+- **Docker** - Conteneurisation
+- **Jest** - Tests unitaires
+- **ESLint** - Linting
+- **Prettier** - Formatage
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+## 🚀 Démarrage Rapide
 
-```sh
-npx nx sync
+### Prérequis
+- **Node.js** 18+ 
+- **Docker** et **Docker Compose**
+- **Yarn** (recommandé)
+- **Make** (pour utiliser le Makefile)
+
+### Installation
+
+```bash
+# 1. Clone le projet
+git clone https://github.com/wyeo/chat-fullstack
+cd chat-fullstack
+
+# 2. Configuration initiale
+make setup
+
+# 3. Démarrage de l'infrastructure Docker
+make start
+
+# 4. Mode développement
+make dev
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+### URLs de développement
 
-```sh
-npx nx sync:check
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Frontend** | http://localhost:4200 | Interface utilisateur React |
+| **Backend API** | http://localhost:3333/api | API REST NestJS |
+| **pgAdmin** | http://localhost:5050 | Interface PostgreSQL |
+| **Mongo Express** | http://localhost:8081 | Interface MongoDB |
+
+### Comptes par défaut
+
+**pgAdmin :**
+- Email: `admin@chat.local`
+- Password: `password`
+
+**Base de données :**
+- PostgreSQL: `admin` / `password`
+- MongoDB: `admin` / `password`
+
+## 📋 Commandes Disponibles
+
+### Makefile (recommandé)
+```bash
+make help              # Affiche l'aide
+make setup             # Configuration initiale
+make start             # Démarre l'infrastructure Docker
+make stop              # Arrête tout
+make clean             # Nettoie tout (containers, volumes)
+make logs              # Affiche les logs Docker
+
+make dev               # Mode dev complet (DB + Apps)
+make dev-backend       # Backend + DB
+make dev-frontend      # Frontend
+make db-only           # Bases de données
+
+make test              # Lance tous les tests
+make test-backend      # Tests backend
+make test-frontend     # Tests frontend
+
+make build             # Build de production
+make build-backend     # Build backend
+make build-frontend    # Build frontend
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+### Scripts Yarn
+```bash
+# Développement
+yarn dev            # Backend + Frontend
+yarn dev:backend    # Backend
+yarn dev:frontend   # Frontend
 
+# Tests
+yarn test           # Tous les tests
+yarn test:backend   # Tests backend
+yarn test:frontend  # Tests frontend
+```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🗄️ Base de Données
 
-## Install Nx Console
+### PostgreSQL - Utilisateurs
+- **Port:** 5432
+- **Base:** `chat_users`
+- **Tables:** `users`
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### MongoDB - Messages
+- **Port:** 27017
+- **Base:** `chat_messages`
+- **Collections:** `messages`, `rooms`, `online_users`
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Connexion manuelle
+```bash
+# PostgreSQL
+psql -h localhost -p 5432 -U admin -d chat_users
 
-## Useful links
+# MongoDB
+mongosh "mongodb://admin:password@localhost:27017/chat_messages"
+```
 
-Learn more:
+## 🧪 Tests
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# Tous les tests
+make test
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# Tests spécifiques
+make test-backend   # Tests backend
+make test-frontend  # Tests frontend
+
+# Tests avec couverture
+make test-backend --coverage
+```
+
+## 🏗️ Build de Production
+
+```bash
+# Build complet
+make build
+
+# Build spécifique
+make build-backend   # Build backend
+make build-frontend  # Build frontend
+```
+
+## 🔧 Configuration
+
+### Variables d'environnement (.env)
+
+Copiez `.env.example` vers `.env` et adaptez :
+```bash
+cp .env.example .env
+```
+
+```bash
+# Application
+NODE_ENV=development
+PORT=3333
+
+# Bases de données
+DATABASE_URL=postgresql://admin:password@localhost:5432/chat_users
+MONGODB_URL=mongodb://admin:password@localhost:27017/chat_messages
+
+# JWT
+JWT_SECRET=your-super-secret-key
+JWT_EXPIRATION=24h
+
+# WebSocket
+WEBSOCKET_PORT=3334
+CORS_ORIGIN=http://localhost:4200
+```
+
+---
+
+Made with ❤️ for Kanbios

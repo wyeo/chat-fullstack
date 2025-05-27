@@ -2,7 +2,17 @@
   "name": "@chat-fullstack/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run-many --target=build --all --parallel",
+    "build:backend": "nx build backend",
+    "build:frontend": "nx build frontend",
+    "dev": "nx run-many --target=serve --projects=backend,frontend --parallel",
+    "dev:backend": "nx serve backend",
+    "dev:frontend": "nx serve frontend",
+    "test": "nx run-many --target=test --all --parallel",
+    "test:backend": "nx test backend",
+    "test:frontend": "nx test frontend"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^10.0.2",
