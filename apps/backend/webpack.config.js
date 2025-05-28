@@ -1,9 +1,19 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
 const { join } = require('path');
+const webpack = require('webpack');
 
 module.exports = {
+  devtool: 'source-map',
   output: {
     path: join(__dirname, 'dist'),
+  },
+  resolve: {
+    alias: {
+      '@backend/auth': join(__dirname, 'src/app/auth'),
+      '@backend/users': join(__dirname, 'src/app/users'),
+      '@backend/app': join(__dirname, 'src/app'),
+      '@backend': join(__dirname, 'src'),
+    },
   },
   plugins: [
     new NxAppWebpackPlugin({
@@ -15,6 +25,19 @@ module.exports = {
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,
+    }),
+    new webpack.BannerPlugin({
+      banner: `
+        if (typeof globalThis.crypto === 'undefined') {
+          const crypto = require('crypto');
+          globalThis.crypto = crypto.webcrypto || crypto;
+          if (!globalThis.crypto.randomUUID && crypto.randomUUID) {
+            globalThis.crypto.randomUUID = crypto.randomUUID.bind(crypto);
+          }
+        }
+      `,
+      raw: true,
+      entryOnly: true,
     }),
   ],
 };

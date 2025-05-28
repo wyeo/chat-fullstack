@@ -16,6 +16,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"]
+    "customConditions": ["development"],
+    "baseUrl": ".",
+    "paths": {
+      "@shared-constants": ["libs/shared-constants/src/index.ts"],
+      "@shared-types": ["libs/shared-types/src/index.ts"],
+      "@shared-utils": ["libs/shared-utils/src/index.ts"]
+    }
   }
 }

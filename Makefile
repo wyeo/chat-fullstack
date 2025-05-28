@@ -90,7 +90,7 @@ logs:
 dev: db-only
 	@echo "$(GREEN)🛠️  Mode développement - Backend + Frontend...$(NC)"
 	@sleep 3
-	yarn dev:run
+	yarn dev
 
 # Backend seulement
 dev-backend: db-only

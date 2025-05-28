@@ -4,7 +4,14 @@
     "outDir": "./out-tsc/jest",
     "types": ["jest", "node"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "paths": {
+      "@backend/*": ["src/*"],
+      "@backend/app/*": ["src/app/*"],
+      "@backend/auth/*": ["src/app/auth/*"],
+      "@backend/users/*": ["src/app/users/*"]
+    }
   },
   "include": [
     "jest.config.ts",

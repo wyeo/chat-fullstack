@@ -7,7 +7,14 @@
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2021"
+    "target": "es2021",
+    "baseUrl": "./",
+    "paths": {
+      "@backend/*": ["src/*"],
+      "@backend/app/*": ["src/app/*"],
+      "@backend/auth/*": ["src/app/auth/*"],
+      "@backend/users/*": ["src/app/users/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": [

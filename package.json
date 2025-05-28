@@ -9,23 +9,19 @@
     "dev": "nx run-many --target=serve --projects=backend,frontend --parallel",
     "dev:backend": "nx serve backend",
     "dev:frontend": "nx serve frontend",
+    "lint": "nx run-many --target=lint --all --parallel",
+    "lint:backend": "nx lint backend",
+    "lint:frontend": "nx lint frontend",
     "test": "nx run-many --target=test --all --parallel",
     "test:backend": "nx test backend",
     "test:frontend": "nx test frontend"
   },
   "private": true,
   "dependencies": {
-    "@nestjs/common": "^10.0.2",
-    "@nestjs/core": "^10.0.2",
-    "@nestjs/platform-express": "^10.0.2",
-    "axios": "^1.6.0",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.0"
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
-    "@nestjs/schematics": "^10.0.1",
-    "@nestjs/testing": "^10.0.2",
     "@nx/eslint": "21.1.2",
     "@nx/eslint-plugin": "21.1.2",
     "@nx/jest": "21.1.2",
