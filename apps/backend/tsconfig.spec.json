@@ -10,7 +10,8 @@
       "@backend/*": ["src/*"],
       "@backend/app/*": ["src/app/*"],
       "@backend/auth/*": ["src/app/auth/*"],
-      "@backend/users/*": ["src/app/users/*"]
+      "@backend/users/*": ["src/app/users/*"],
+      "@backend/messages/*": ["src/app/messages/*"]
     }
   },
   "include": [

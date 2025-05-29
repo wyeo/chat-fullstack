@@ -19,6 +19,7 @@ export default {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: 'test-output/jest/coverage',
   moduleNameMapper: {
+    '^@backend/messages/(.*)$': '<rootDir>/src/app/messages/$1',
     '^@backend/auth/(.*)$': '<rootDir>/src/app/auth/$1',
     '^@backend/users/(.*)$': '<rootDir>/src/app/users/$1',
     '^@backend/app/(.*)$': '<rootDir>/src/app/$1',
