@@ -68,7 +68,7 @@ describe('LocalStrategy', () => {
         UnauthorizedException
       );
       await expect(strategy.validate(email, password)).rejects.toThrow(
-        'Email ou mot de passe invalide'
+        'Invalid email or password'
       );
     });
   });

@@ -158,7 +158,7 @@ describe('AuthService', () => {
         BadRequestException
       );
       await expect(service.register(registerDto)).rejects.toThrow(
-        "Erreur lors de l'inscription"
+        "Error during registration"
       );
     });
   });
@@ -246,7 +246,7 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException if user not found', async () => {
       usersService.findOne.mockRejectedValue(
-        new NotFoundException(`Utilisateur avec l'ID ${mockUser.id} non trouvé`)
+        new NotFoundException(`User with ID ${mockUser.id} not found`)
       );
 
       await expect(service.refreshToken(mockUser)).rejects.toThrow(
@@ -262,7 +262,7 @@ describe('AuthService', () => {
         UnauthorizedException
       );
       await expect(service.refreshToken(mockUser)).rejects.toThrow(
-        'Utilisateur non autorisé'
+        'Unauthorized user'
       );
     });
   });

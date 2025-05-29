@@ -7,6 +7,11 @@ import { Public } from '@backend/auth/decorators/public.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  /**
+   * Returns basic application information (public endpoint)
+   * 
+   * @returns {object} Application data with welcome message
+   */
   @Public()
   @Get()
   getData() {

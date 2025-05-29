@@ -27,6 +27,13 @@ export class AuthService {
     private configService: ConfigService
   ) {}
 
+  /**
+   * Validates a user's credentials by checking email and password
+   * 
+   * @param {string} email - The user's email address
+   * @param {string} password - The user's plain text password
+   * @returns {Promise<UserEntity | null>} The validated user entity or null if invalid
+   */
   async validateUser(
     email: string,
     password: string
@@ -34,6 +41,14 @@ export class AuthService {
     return this.usersService.validateUser(email, password);
   }
 
+  /**
+   * Registers a new user account and returns authentication tokens
+   * 
+   * @param {RegisterDto} registerDto - The registration data containing user information
+   * @returns {Promise<AuthResponseDto>} Authentication response with access token and user data
+   * @throws {BadRequestException} When registration fails due to validation or creation errors
+   * @throws {ConflictException} When a user with the email already exists (status 409)
+   */
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
     try {
       const user = await this.usersService.create({
@@ -51,10 +66,17 @@ export class AuthService {
           throw error;
         }
       }
-      throw new BadRequestException("Erreur lors de l'inscription");
+      throw new BadRequestException("Error during registration");
     }
   }
 
+  /**
+   * Authenticates a user and generates JWT tokens for access
+   * 
+   * @param {UserEntity} user - The validated user entity to authenticate
+   * @returns {Promise<AuthResponseDto>} Authentication response with access token and user data
+   * @throws {UnauthorizedException} When user is undefined or invalid
+   */
   async login(user: UserEntity): Promise<AuthResponseDto> {
     if (!user) {
       this.logger.error('Login failed: user is undefined');
@@ -64,6 +86,14 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
+  /**
+   * Generates an authentication response with JWT token and user data
+   * 
+   * @private
+   * @param {UserEntity} user - The user entity to generate tokens for
+   * @returns {AuthResponseDto} Complete authentication response with token and user info
+   * @throws {UnauthorizedException} When user or user.id is invalid
+   */
   private generateAuthResponse(user: UserEntity): AuthResponseDto {
     if (!user || !user.id) {
       this.logger.error(
@@ -92,6 +122,13 @@ export class AuthService {
     };
   }
 
+  /**
+   * Parses JWT expiration time string and converts to seconds
+   * 
+   * @private
+   * @param {string} expiration - Expiration string in format like '1h', '30m', '7d', '3600s'
+   * @returns {number} Expiration time in seconds (defaults to 3600 if parsing fails)
+   */
   private parseExpirationTime(expiration: string): number {
     const match = expiration.match(/^(\d+)([smhd])$/);
     if (!match) {
@@ -115,16 +152,29 @@ export class AuthService {
     }
   }
 
+  /**
+   * Refreshes an existing JWT token by generating a new one for the user
+   * 
+   * @param {UserEntity} user - The user entity to refresh tokens for
+   * @returns {Promise<AuthResponseDto>} New authentication response with fresh tokens
+   * @throws {UnauthorizedException} When user is not found or account is deactivated
+   */
   async refreshToken(user: UserEntity): Promise<AuthResponseDto> {
     const currentUser = await this.usersService.findOne(user.id);
 
     if (!currentUser || !currentUser.isActive) {
-      throw new UnauthorizedException('Utilisateur non autorisé');
+      throw new UnauthorizedException('Unauthorized user');
     }
 
     return this.generateAuthResponse(currentUser);
   }
 
+  /**
+   * Logs out a user by invalidating their session (currently just logs the action)
+   * 
+   * @param {string} userId - The ID of the user to log out
+   * @returns {Promise<void>} Promise that resolves when logout is complete
+   */
   async logout(userId: string): Promise<void> {
     this.logger.log(`User ${userId} logged out`);
     return Promise.resolve();

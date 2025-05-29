@@ -66,7 +66,7 @@ describe('AdminGuard', () => {
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
       expect(() => guard.canActivate(context)).toThrow(
-        'Utilisateur non authentifié'
+        'User not authenticated'
       );
     });
 
@@ -80,7 +80,7 @@ describe('AdminGuard', () => {
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
       expect(() => guard.canActivate(context)).toThrow(
-        'Accès réservé aux administrateurs'
+        'Access reserved for administrators'
       );
     });
 
@@ -93,7 +93,7 @@ describe('AdminGuard', () => {
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
       expect(() => guard.canActivate(context)).toThrow(
-        'Accès réservé aux administrateurs'
+        'Access reserved for administrators'
       );
     });
   });

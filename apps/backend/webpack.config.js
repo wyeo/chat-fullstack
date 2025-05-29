@@ -11,6 +11,7 @@ module.exports = {
     alias: {
       '@backend/auth': join(__dirname, 'src/app/auth'),
       '@backend/users': join(__dirname, 'src/app/users'),
+      '@backend/messages': join(__dirname, 'src/app/messages'),
       '@backend/app': join(__dirname, 'src/app'),
       '@backend': join(__dirname, 'src'),
     },

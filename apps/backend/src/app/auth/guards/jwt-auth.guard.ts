@@ -14,6 +14,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
+  /**
+   * Determines if the current request can be activated based on JWT authentication
+   * Allows public routes to bypass authentication
+   *
+   * @param {ExecutionContext} context - The execution context of the current request
+   * @returns {boolean | Promise<boolean> | Observable<boolean>} Whether the request is authorized
+   */
   override canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -35,6 +42,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
+  /**
+   * Handles the result of JWT authentication and logs validation details
+   *
+   * @template TUser - The user type (defaults to UserEntity)
+   * @param {unknown} err - Any error that occurred during authentication
+   * @param {UserEntity} user - The authenticated user entity
+   * @param {unknown} info - Additional authentication info
+   * @param {ExecutionContext} context - The execution context
+   * @param {unknown} status - Optional status information
+   * @returns {TUser} The authenticated user or throws an exception
+   */
   override handleRequest<TUser = UserEntity>(
     err: unknown,
     user: UserEntity,

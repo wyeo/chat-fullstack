@@ -26,6 +26,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     );
   }
 
+  /**
+   * Validates a JWT payload and returns the associated user entity
+   * This method is called by Passport when a JWT token is provided
+   * 
+   * @param {JwtPayloadInterface} payload - The decoded JWT payload containing user info
+   * @returns {Promise<UserEntity>} The user entity if validation succeeds
+   * @throws {UnauthorizedException} When user is not found or account is deactivated
+   */
   async validate(payload: JwtPayloadInterface): Promise<UserEntity> {
     this.logger.log(`Validating JWT payload: ${JSON.stringify(payload)}`);
 
@@ -34,12 +42,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       if (!user) {
         this.logger.error(`User not found with ID: ${payload.sub}`);
-        throw new UnauthorizedException('Utilisateur non trouvé');
+        throw new UnauthorizedException('User not found');
       }
 
       if (!user.isActive) {
         this.logger.error(`User account is deactivated: ${user.email}`);
-        throw new UnauthorizedException('Compte désactivé');
+        throw new UnauthorizedException('Account deactivated');
       }
 
       this.logger.log(`JWT validation successful for user: ${user.email}`);

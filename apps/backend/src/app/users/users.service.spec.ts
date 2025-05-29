@@ -107,7 +107,7 @@ describe('UsersService', () => {
         ConflictException
       );
       await expect(service.create(createUserDto)).rejects.toThrow(
-        'Un utilisateur avec cet email existe déjà'
+        'A user with this email already exists'
       );
       expect(usersRepository.create).not.toHaveBeenCalled();
     });
@@ -153,7 +153,7 @@ describe('UsersService', () => {
         NotFoundException
       );
       await expect(service.findOne('non-existent')).rejects.toThrow(
-        `Utilisateur avec l'ID non-existent non trouvé`
+        `User with ID non-existent not found`
       );
     });
   });
@@ -233,7 +233,7 @@ describe('UsersService', () => {
         ConflictException
       );
       await expect(service.update('test-id', updateWithEmail)).rejects.toThrow(
-        'Un utilisateur avec cet email existe déjà'
+        'A user with this email already exists'
       );
     });
 
@@ -275,7 +275,7 @@ describe('UsersService', () => {
         BadRequestException
       );
       await expect(service.remove('test-id')).rejects.toThrow(
-        "Impossible de supprimer l'utilisateur"
+        "Unable to delete the user"
       );
     });
   });

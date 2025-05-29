@@ -14,10 +14,19 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  /**
+   * Validates user credentials using email and password
+   * This method is called by Passport Local strategy during login
+   * 
+   * @param {string} email - The user's email address
+   * @param {string} password - The user's plain text password
+   * @returns {Promise<UserEntity>} The authenticated user entity
+   * @throws {UnauthorizedException} When credentials are invalid
+   */
   async validate(email: string, password: string): Promise<UserEntity> {
     const user = await this.authService.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException('Email ou mot de passe invalide');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     return user;

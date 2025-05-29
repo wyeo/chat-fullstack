@@ -2,35 +2,62 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 export class UserResponseDto {
-  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Unique user identifier',
+  })
   @Expose()
   id!: string;
 
-  @ApiProperty({ example: 'user@example.com' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+    format: 'email',
+  })
   @Expose()
   email!: string;
 
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({
+    example: 'John',
+    description: 'User first name',
+  })
   @Expose()
   firstName!: string;
 
-  @ApiProperty({ example: 'Doe' })
+  @ApiProperty({
+    example: 'Doe',
+    description: 'User last name',
+  })
   @Expose()
   lastName!: string;
 
-  @ApiProperty({ example: true })
+  @ApiProperty({
+    example: true,
+    description: 'Indicates if the user account is active',
+  })
   @Expose()
   isActive!: boolean;
 
-  @ApiProperty({ example: false })
+  @ApiProperty({
+    example: false,
+    description: 'Indicates if the user has administrator privileges',
+  })
   @Expose()
   isAdmin!: boolean;
 
-  @ApiProperty({ example: '2024-01-01T00:00:00.000Z' })
+  @ApiProperty({
+    example: '2024-01-01T00:00:00.000Z',
+    description: 'Account creation date',
+    format: 'date-time',
+  })
   @Expose()
   createdAt!: Date;
 
-  @ApiProperty({ example: '2024-01-01T00:00:00.000Z' })
+  @ApiProperty({
+    example: '2024-01-01T00:00:00.000Z',
+    description: 'Account last update date',
+    format: 'date-time',
+  })
   @Expose()
   updatedAt!: Date;
 

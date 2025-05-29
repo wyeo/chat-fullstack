@@ -112,7 +112,7 @@ describe('JwtStrategy', () => {
 
     it('should throw UnauthorizedException if user not found', async () => {
       usersService.findOne.mockRejectedValue(
-        new NotFoundException(`Utilisateur avec l'ID ${payload.sub} non trouvé`)
+        new NotFoundException(`User with ID ${payload.sub} not found`)
       );
 
       await expect(strategy.validate(payload)).rejects.toThrow(
@@ -128,7 +128,7 @@ describe('JwtStrategy', () => {
         UnauthorizedException
       );
       await expect(strategy.validate(payload)).rejects.toThrow(
-        'Compte désactivé'
+        'Account deactivated'
       );
     });
 
