@@ -1,21 +1,19 @@
-/* eslint-disable */
-import { readFileSync } from 'fs';
-
-// Reading the SWC compilation config for the spec files
-const swcJestConfig = JSON.parse(
-  readFileSync(`${__dirname}/.spec.swcrc`, 'utf-8')
-);
-
-// Disable .swcrc look-up by SWC core because we're passing in swcJestConfig ourselves
-swcJestConfig.swcrc = false;
-
 export default {
   displayName: '@chat-fullstack/frontend',
   preset: '../../jest.preset.js',
-  testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
+    '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
   },
-  moduleFileExtensions: ['ts', 'js', 'html'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: 'test-output/jest/coverage',
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    '\\.css$': 'identity-obj-proxy',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@shared-constants$': '<rootDir>/../../libs/shared-constants/src/index.ts',
+    '^@shared-types$': '<rootDir>/../../libs/shared-types/src/index.ts',
+    '^@shared-utils$': '<rootDir>/../../libs/shared-utils/src/index.ts',
+  },
 };
