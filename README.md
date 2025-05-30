@@ -32,7 +32,7 @@ chat-fullstack/
 - **React Router** - Navigation
 - **Context API** - Gestion d'état
 - **Socket.io Client** - WebSocket
-- **CSS/SCSS** - Styling
+- **CSS/TailwindCSS** - Styling
 
 ### Outils
 - **NX** - Monorepo et build system
