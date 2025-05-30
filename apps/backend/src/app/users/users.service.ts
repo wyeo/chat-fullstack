@@ -67,6 +67,17 @@ export class UsersService {
   }
 
   /**
+   * Retrieves all users except the specified user, without sensitive information
+   * 
+   * @param {string} excludeUserId - The ID of the user to exclude from the results
+   * @returns {Promise<UserEntity[]>} Array of user entities excluding the specified user
+   */
+  async findAllExceptUser(excludeUserId: string): Promise<UserEntity[]> {
+    const allUsers = await this.findAll();
+    return allUsers.filter(user => user.id !== excludeUserId);
+  }
+
+  /**
    * Finds a user by their unique ID
    * 
    * @param {string} id - The unique identifier of the user

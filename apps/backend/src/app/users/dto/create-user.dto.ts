@@ -9,6 +9,11 @@ import {
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+/**
+ * DTO for creating a new user.
+ * Used by administrators to create user accounts directly,
+ * with validation for all required user information and optional admin privileges.
+ */
 export class CreateUserDto {
   @ApiProperty({
     example: 'user@example.com',

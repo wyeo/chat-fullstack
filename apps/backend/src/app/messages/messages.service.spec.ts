@@ -89,7 +89,7 @@ describe('MessagesService', () => {
     ],
     isActive: true,
     lastActivity: new Date(),
-    toObject: jest.fn().mockReturnThis(),
+    toJSON: jest.fn().mockReturnThis(),
   };
 
   const mockMessage = {
@@ -104,7 +104,7 @@ describe('MessagesService', () => {
     isEdited: false,
     isDeleted: false,
     save: jest.fn(),
-    toObject: jest.fn().mockReturnThis(),
+    toJSON: jest.fn().mockReturnThis(),
   };
 
   const mockOnlineUser = {
@@ -124,7 +124,10 @@ describe('MessagesService', () => {
           useValue: Object.assign(
             jest.fn().mockImplementation(() => ({
               ...mockRoom,
-              save: jest.fn().mockResolvedValue(mockRoom),
+              save: jest.fn().mockResolvedValue({
+                ...mockRoom,
+                toJSON: jest.fn().mockReturnValue(mockRoom),
+              }),
             })),
             {
               find: jest.fn(),
@@ -144,7 +147,10 @@ describe('MessagesService', () => {
           useValue: Object.assign(
             jest.fn().mockImplementation(() => ({
               ...mockMessage,
-              save: jest.fn().mockResolvedValue(mockMessage),
+              save: jest.fn().mockResolvedValue({
+                ...mockMessage,
+                toJSON: jest.fn().mockReturnValue(mockMessage),
+              }),
             })),
             {
               find: jest.fn(),
@@ -253,10 +259,25 @@ describe('MessagesService', () => {
     });
 
     describe('getMessages', () => {
-      const mockMessages = [
-        { ...mockMessage, timestamp: new Date('2024-01-01') },
-        { ...mockMessage, id: 'message456', timestamp: new Date('2024-01-02') },
+      const mockMessagesData = [
+        { _id: 'message123', __v: 0, content: 'Test message', senderId: 'user123', senderUsername: 'John Doe', roomId: 'room123', timestamp: new Date('2024-01-01'), messageType: MessageType.TEXT, isEdited: false, isDeleted: false },
+        { _id: 'message456', __v: 0, content: 'Test message 2', senderId: 'user123', senderUsername: 'John Doe', roomId: 'room123', timestamp: new Date('2024-01-02'), messageType: MessageType.TEXT, isEdited: false, isDeleted: false },
       ];
+
+      const mockMessages = mockMessagesData.map(data => ({
+        ...data,
+        toJSON: jest.fn().mockReturnValue({
+          id: data._id.toString(),
+          content: data.content,
+          senderId: data.senderId,
+          senderUsername: data.senderUsername,
+          roomId: data.roomId,
+          timestamp: data.timestamp,
+          messageType: data.messageType,
+          isEdited: data.isEdited,
+          isDeleted: data.isDeleted,
+        }),
+      }));
 
       beforeEach(() => {
         const chainMock = {
@@ -277,11 +298,23 @@ describe('MessagesService', () => {
           .mockResolvedValue(true);
       });
 
-      it('should get messages with default pagination', async () => {
+      it('should get messages with default pagination and include id field', async () => {
         const query: GetMessagesDto = {};
         const result = await service.getMessages('user123', 'room123', query);
 
-        expect(result).toEqual(mockMessages);
+        const expectedMessages = mockMessagesData.map(data => ({
+          id: data._id.toString(),
+          content: data.content,
+          senderId: data.senderId,
+          senderUsername: data.senderUsername,
+          roomId: data.roomId,
+          timestamp: data.timestamp,
+          messageType: data.messageType,
+          isEdited: data.isEdited,
+          isDeleted: data.isDeleted,
+        }));
+        
+        expect(result).toEqual(expectedMessages);
         expect(messageModel.find).toHaveBeenCalledWith({
           roomId: 'room123',
           isDeleted: false,
@@ -348,6 +381,12 @@ describe('MessagesService', () => {
             content: 'Updated message',
             isEdited: true,
             editedAt: new Date(),
+            toJSON: jest.fn().mockReturnValue({
+              ...mockMessage,
+              content: 'Updated message',
+              isEdited: true,
+              editedAt: new Date(),
+            }),
           }),
         };
         (messageModel.findById as jest.Mock).mockResolvedValue(
@@ -409,6 +448,11 @@ describe('MessagesService', () => {
             ...mockMessage,
             isDeleted: true,
             deletedAt: new Date(),
+            toJSON: jest.fn().mockReturnValue({
+              ...mockMessage,
+              isDeleted: true,
+              deletedAt: new Date(),
+            }),
           }),
         };
         (messageModel.findById as jest.Mock).mockResolvedValue(
@@ -505,7 +549,10 @@ describe('MessagesService', () => {
     });
 
     describe('getUserRooms', () => {
-      const mockRooms = [mockRoom, { ...mockRoom, id: 'room456' }];
+      const mockRooms = [
+        { ...mockRoom, toJSON: jest.fn().mockReturnValue(mockRoom) },
+        { ...mockRoom, id: 'room456', toJSON: jest.fn().mockReturnValue({ ...mockRoom, id: 'room456' }) }
+      ];
 
       beforeEach(() => {
         const chainMock = {
@@ -525,13 +572,17 @@ describe('MessagesService', () => {
           'members.leftAt': { $exists: false },
           isActive: true,
         });
-        expect(result).toEqual(mockRooms);
+        expect(result).toEqual([mockRoom, { ...mockRoom, id: 'room456' }]);
       });
     });
 
     describe('getRoomById', () => {
       beforeEach(() => {
-        const execMock = jest.fn().mockResolvedValue(mockRoom);
+        const mockRoomWithToJSON = { 
+          ...mockRoom, 
+          toJSON: jest.fn().mockReturnValue(mockRoom) 
+        };
+        const execMock = jest.fn().mockResolvedValue(mockRoomWithToJSON);
         (roomModel.findById as jest.Mock).mockReturnValue({ exec: execMock });
       });
 
@@ -554,7 +605,11 @@ describe('MessagesService', () => {
 
     describe('addMemberToRoom', () => {
       beforeEach(() => {
-        const roomSaveMock = jest.fn().mockResolvedValue(mockRoom);
+        const mockRoomWithToJSON = {
+          ...mockRoom,
+          toJSON: jest.fn().mockReturnValue(mockRoom)
+        };
+        const roomSaveMock = jest.fn().mockResolvedValue(mockRoomWithToJSON);
         const mockRoomWithSave = {
           ...mockRoom,
           save: roomSaveMock,
@@ -645,7 +700,10 @@ describe('MessagesService', () => {
               // Simulate the actual save behavior
               delete (leftMember as { leftAt?: Date }).leftAt;
               leftMember.joinedAt = new Date();
-              return Promise.resolve(this);
+              return Promise.resolve({
+                ...this,
+                toJSON: () => this
+              });
             }),
         };
         (roomModel.findById as jest.Mock).mockResolvedValue(roomWithLeftMember);

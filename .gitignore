@@ -48,3 +48,6 @@ test-output
 # Environnement
 .env
 
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*

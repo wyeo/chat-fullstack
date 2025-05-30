@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
+/**
+ * DTO for user information in authentication responses.
+ * This DTO is used when returning user data after successful authentication,
+ * ensuring sensitive information like passwords is excluded from the response.
+ */
 export class UserResponseDto {
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -69,6 +74,11 @@ export class UserResponseDto {
   }
 }
 
+/**
+ * DTO for authentication response after successful login or registration.
+ * Contains the JWT access token and user information needed by the client
+ * to authenticate subsequent requests and display user details.
+ */
 export class AuthResponseDto {
   @ApiProperty({
     description: 'JWT Access Token',

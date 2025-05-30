@@ -75,7 +75,7 @@ export class MessagesService {
       lastActivity: new Date(),
     });
 
-    return savedMessage.toObject();
+    return savedMessage.toJSON();
   }
 
   /**
@@ -108,13 +108,12 @@ export class MessagesService {
 
     const messages = await this.messageModel
       .find(filter)
-      .sort({ timestamp: -1 })
+      .sort({ timestamp: 1 })
       .limit(query.limit || 50)
       .skip(query.offset || 0)
-      .lean()
       .exec();
 
-    return messages;
+    return messages.map((message) => message.toJSON());
   }
 
   /**
@@ -151,7 +150,7 @@ export class MessagesService {
     message.editedAt = new Date();
 
     const updatedMessage = await message.save();
-    return updatedMessage.toObject();
+    return updatedMessage.toJSON();
   }
 
   /**
@@ -177,7 +176,7 @@ export class MessagesService {
     message.deletedAt = new Date();
 
     const deletedMessage = await message.save();
-    return deletedMessage.toObject();
+    return deletedMessage.toJSON();
   }
 
   // ========== ROOMS ==========
@@ -204,7 +203,7 @@ export class MessagesService {
     });
 
     if (existingRoom) {
-      return existingRoom.toObject();
+      return existingRoom.toJSON();
     }
 
     const user = await this.usersService.findOne(userId);
@@ -230,7 +229,7 @@ export class MessagesService {
     });
 
     const savedRoom = await room.save();
-    return savedRoom.toObject();
+    return savedRoom.toJSON();
   }
 
   /**
@@ -249,7 +248,7 @@ export class MessagesService {
       .sort({ lastActivity: -1 })
       .exec();
 
-    return rooms;
+    return rooms.map((room) => room.toJSON());
   }
 
   /**
@@ -264,7 +263,7 @@ export class MessagesService {
     if (!room) {
       throw new NotFoundException('Room not found');
     }
-    return room;
+    return room.toJSON();
   }
 
   /**
@@ -313,7 +312,7 @@ export class MessagesService {
 
     const updatedRoom = await room.save();
 
-    return updatedRoom;
+    return updatedRoom.toJSON();
   }
 
   /**

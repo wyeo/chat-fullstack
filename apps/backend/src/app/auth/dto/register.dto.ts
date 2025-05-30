@@ -8,6 +8,11 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+/**
+ * DTO for user registration request.
+ * Validates all required information for creating a new user account,
+ * including email uniqueness, name constraints, and password complexity requirements.
+ */
 export class RegisterDto {
   @ApiProperty({
     example: 'user@example.com',

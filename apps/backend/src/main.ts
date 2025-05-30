@@ -9,7 +9,7 @@ import { AppModule } from '@backend/app/app.module';
 /**
  * Bootstraps the NestJS application with global configuration
  * Sets up validation pipes, interceptors, Swagger documentation, and starts the server
- * 
+ *
  * @returns {Promise<void>} Promise that resolves when the application is running
  */
 async function bootstrap() {
@@ -18,6 +18,13 @@ async function bootstrap() {
   const globalPrefix = 'api';
 
   app.setGlobalPrefix(globalPrefix);
+
+  app.enableCors({
+    origin: [process.env.ALLOWED_ORIGINS || 'http://localhost:4200'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -38,13 +45,12 @@ async function bootstrap() {
       `Complete API for a real-time chat application with WebSocket support.\n\n
       ## Features
       - **JWT Authentication**: Registration, login, session management
-      - **User Management**: Complete CRUD operations (Admin only)
+      - **User Management**: Complete CRUD operations
       - **Real-time Messages**: Send, edit, delete messages
       - **Chat Rooms**: Direct conversations and member management
       - **Online Presence**: Track connected users\n\n
       ## Authentication
       Most endpoints require a JWT token in the Authorization header.\n
-      Use the format: \`(without Bearer prefix on Swagger)<your_jwt_token>\`
       `
     )
     .setVersion('1.0')
@@ -52,10 +58,7 @@ async function bootstrap() {
       'Authentication & User Session',
       'Endpoints for authentication and session management'
     )
-    .addTag(
-      'User Management (Admin)',
-      'User management operations (administrator access required)'
-    )
+    .addTag('User Management', 'User management operations (mixed access)')
     .addTag('Messages & Rooms', 'Message and chat room management')
     .addBearerAuth(
       {
@@ -67,13 +70,6 @@ async function bootstrap() {
         in: 'header',
       },
       'JWT-auth'
-    )
-    .addServer('http://localhost:3000', 'Development server')
-    .addServer('https://api.example.com', 'Production server')
-    .setContact(
-      'Development Team',
-      'https://example.com/support',
-      'support@example.com'
     )
     .build();
 

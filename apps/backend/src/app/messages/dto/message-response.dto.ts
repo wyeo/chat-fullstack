@@ -4,6 +4,11 @@ import { MessageType } from '@backend/messages/schemas/message.schema';
 import { UserStatus } from '@backend/messages/schemas/online-user.schema';
 import { RoomType, MemberRole } from '@backend/messages/schemas/room.schema';
 
+/**
+ * DTO for message response data.
+ * Used when returning message information from the API,
+ * including all message metadata and content details.
+ */
 export class MessageResponseDto {
   @ApiProperty({
     example: '507f1f77bcf86cd799439011',
@@ -76,6 +81,11 @@ export class MessageResponseDto {
   deletedAt?: Date;
 }
 
+/**
+ * DTO for room member information.
+ * Represents a user's membership in a chat room,
+ * including their role and participation timeline.
+ */
 export class RoomMemberDto {
   @ApiProperty({
     example: '507f1f77bcf86cd799439012',
@@ -105,6 +115,11 @@ export class RoomMemberDto {
   leftAt?: Date;
 }
 
+/**
+ * DTO for chat room response data.
+ * Contains complete room information including members,
+ * metadata, and activity status for display in the UI.
+ */
 export class RoomResponseDto {
   @ApiProperty({
     example: '507f1f77bcf86cd799439013',
@@ -171,6 +186,11 @@ export class RoomResponseDto {
   updatedAt!: Date;
 }
 
+/**
+ * DTO for online user status information.
+ * Tracks user presence in the chat system,
+ * including their connection status and last activity.
+ */
 export class OnlineUserResponseDto {
   @ApiProperty({
     example: '507f1f77bcf86cd799439012',
@@ -199,6 +219,11 @@ export class OnlineUserResponseDto {
   lastSeen!: Date;
 }
 
+/**
+ * DTO for paginated message list response.
+ * Used when returning multiple messages with pagination metadata,
+ * typically for message history retrieval.
+ */
 export class MessagesListResponseDto {
   @ApiProperty({
     type: [MessageResponseDto],
@@ -225,6 +250,11 @@ export class MessagesListResponseDto {
   limit!: number;
 }
 
+/**
+ * DTO for online users list response.
+ * Returns a list of currently online users with their status,
+ * used for displaying active users in the chat interface.
+ */
 export class OnlineUsersListResponseDto {
   @ApiProperty({
     type: [OnlineUserResponseDto],
@@ -239,6 +269,11 @@ export class OnlineUsersListResponseDto {
   count!: number;
 }
 
+/**
+ * DTO for standardized API error responses.
+ * Provides consistent error information across all API endpoints,
+ * including error details, timestamps, and request context.
+ */
 export class ApiErrorResponseDto {
   @ApiProperty({
     example: 404,

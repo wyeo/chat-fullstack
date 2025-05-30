@@ -1,7 +1,16 @@
-import { sharedTypes } from './shared-types.js';
+import { User } from './user.types.js';
 
-describe('sharedTypes', () => {
-  it('should work', () => {
-    expect(sharedTypes()).toEqual('shared-types');
+describe('shared-types', () => {
+  it('should export User type', () => {
+    const user: User = {
+      id: '1',
+      email: 'test@example.com',
+      firstName: 'Test',
+      lastName: 'User',
+      username: 'testuser',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    expect(user).toBeDefined();
   });
 });

@@ -25,15 +25,17 @@ import { UpdateUserDto } from '@backend/users/dto/update-user.dto';
 
 import { AdminGuard } from '@backend/auth/guards/admin.guard';
 import { UserResponseDto } from '@backend/auth/dto/authentication.dto';
+import { JwtAuthGuard } from '@backend/auth/guards/jwt-auth.guard';
+import { CurrentUser } from '@backend/auth/decorators/current-user.decorator';
 
-@ApiTags('User Management (Admin)')
+@ApiTags('User Management')
 @Controller('users')
-@UseGuards(AdminGuard)
 @ApiBearerAuth('JWT-auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Create a new user (Admin only)' })
   @ApiResponse({
     status: 201,
@@ -98,28 +100,31 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
-    summary: 'Retrieve all users (Admin only)',
+    summary: 'Retrieve all users except the current user',
   })
   @ApiResponse({
     status: 200,
-    description: 'Users list retrieved successfully',
+    description: 'Users list retrieved successfully (excluding current user)',
     type: [UserResponseDto],
   })
   @ApiResponse({
-    status: 403,
-    description: 'Access denied - Admin only',
+    status: 401,
+    description: 'Authentication required',
   })
   /**
-   * Retrieves all users from the system (Admin only)
+   * Retrieves all users from the system except the current user
    * 
-   * @returns {Promise<UserEntity[]>} Array of all user entities
+   * @param {string} currentUserId - The ID of the currently authenticated user
+   * @returns {Promise<UserEntity[]>} Array of all user entities excluding the current user
    */
-  async findAll(): Promise<UserEntity[]> {
-    return await this.usersService.findAll();
+  async findAll(@CurrentUser('id') currentUserId: string): Promise<UserEntity[]> {
+    return await this.usersService.findAllExceptUser(currentUserId);
   }
 
   @Get(':id')
+  @UseGuards(AdminGuard)
   @ApiOperation({
     summary: 'Retrieve a user by ID (Admin only)',
   })
@@ -148,6 +153,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Update a user (Admin only)' })
   @ApiParam({ name: 'id', description: 'User ID', type: 'string' })
   @ApiResponse({
@@ -182,6 +188,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a user (Admin only)' })
   @ApiParam({ name: 'id', description: 'User ID', type: 'string' })

@@ -14,6 +14,11 @@ import { MessageType } from '@backend/messages/schemas/message.schema';
 
 export * from './message-response.dto';
 
+/**
+ * DTO for creating a new message.
+ * Validates message content and target room when sending messages
+ * through REST API endpoints.
+ */
 export class CreateMessageDto {
   @ApiProperty({
     description: 'Content of the message',
@@ -46,6 +51,11 @@ export class CreateMessageDto {
   messageType?: MessageType;
 }
 
+/**
+ * DTO for updating an existing message.
+ * Used when editing message content, with validation
+ * for content length and format.
+ */
 export class UpdateMessageDto {
   @ApiProperty({
     description: 'Updated content of the message',
@@ -60,6 +70,11 @@ export class UpdateMessageDto {
   content!: string;
 }
 
+/**
+ * DTO for creating a direct message room.
+ * Initiates a one-on-one conversation between the current user
+ * and a target user.
+ */
 export class CreateDirectRoomDto {
   @ApiProperty({
     description: 'ID of the user to start a direct conversation with',
@@ -70,6 +85,11 @@ export class CreateDirectRoomDto {
   targetUserId!: string;
 }
 
+/**
+ * DTO for adding a member to an existing room.
+ * Used when inviting users to group conversations,
+ * with validation for user existence.
+ */
 export class AddMemberDto {
   @ApiProperty({
     description: 'ID of the user to add to the room',
@@ -80,6 +100,11 @@ export class AddMemberDto {
   userId!: string;
 }
 
+/**
+ * DTO for message retrieval query parameters.
+ * Supports pagination and filtering when fetching message history
+ * from a room or conversation.
+ */
 export class GetMessagesDto {
   @ApiPropertyOptional({
     description: 'Number of messages to retrieve (max 100)',
@@ -111,6 +136,11 @@ export class GetMessagesDto {
   before?: string;
 }
 
+/**
+ * DTO for WebSocket room join event.
+ * Used when a client wants to join a chat room
+ * and receive real-time message updates.
+ */
 export class WsJoinRoomDto {
   @ApiProperty({
     description: 'ID of the room to join via WebSocket',
@@ -121,6 +151,11 @@ export class WsJoinRoomDto {
   roomId!: string;
 }
 
+/**
+ * DTO for WebSocket room leave event.
+ * Used when a client disconnects from a chat room
+ * and stops receiving real-time updates.
+ */
 export class WsLeaveRoomDto {
   @ApiProperty({
     description: 'ID of the room to leave via WebSocket',
@@ -131,6 +166,11 @@ export class WsLeaveRoomDto {
   roomId!: string;
 }
 
+/**
+ * DTO for sending messages via WebSocket.
+ * Validates message data for real-time message delivery
+ * through WebSocket connections.
+ */
 export class WsSendMessageDto {
   @ApiProperty({
     description: 'Content of the message to send via WebSocket',

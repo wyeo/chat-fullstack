@@ -77,11 +77,11 @@ describe('UsersController', () => {
   describe('findAll', () => {
     it('should return an array of users', async () => {
       const users = [mockUser];
-      usersService.findAll.mockResolvedValue(users);
+      usersService.findAllExceptUser = jest.fn().mockResolvedValue(users);
 
-      const result = await controller.findAll();
+      const result = await controller.findAll('current-user-id');
 
-      expect(usersService.findAll).toHaveBeenCalled();
+      expect(usersService.findAllExceptUser).toHaveBeenCalledWith('current-user-id');
       expect(result).toEqual(users);
     });
   });
